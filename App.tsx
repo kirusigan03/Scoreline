@@ -1,45 +1,78 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, { useEffect, useState, useMemo } from 'react';
+import { Provider } from 'react-redux';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import NetInfo from '@react-native-community/netinfo';
+import { store } from './src/app/store';
+import { RootNavigator } from './src/navigation/RootNavigator';
+import { ThemeContext, darkTheme, lightTheme, ThemeMode } from './src/theme';
+import { getThemePreference, saveThemePreference } from './src/storage/preferencesStorage';
+import { setNetworkStatus } from './src/features/offline/offlineSlice';
+import { setTheme } from './src/features/settings/settingsSlice';
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+const AppContent: React.FC = () => {
+  const [themeMode, setThemeModeState] = useState<ThemeMode>('dark');
 
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
+  useEffect(() => {
+    // Restore persistent theme preference
+    const restoreTheme = async () => {
+      const savedMode = await getThemePreference();
+      if (savedMode) {
+        setThemeModeState(savedMode);
+        store.dispatch(setTheme(savedMode));
+      }
+    };
+    restoreTheme();
+
+    // Subscribe to network connectivity changes
+    const unsubscribeNetInfo = NetInfo.addEventListener((state) => {
+      const isOnline = Boolean(state.isConnected);
+      store.dispatch(
+        setNetworkStatus({
+          isOnline,
+          isInternetReachable: state.isInternetReachable,
+        })
+      );
+    });
+
+    return () => {
+      unsubscribeNetInfo();
+    };
+  }, []);
+
+  const setThemeMode = (mode: ThemeMode) => {
+    setThemeModeState(mode);
+    saveThemePreference(mode);
+    store.dispatch(setTheme(mode));
+  };
+
+  const toggleTheme = () => {
+    const nextMode: ThemeMode = themeMode === 'dark' ? 'light' : 'dark';
+    setThemeMode(nextMode);
+  };
+
+  const themeValue = useMemo(
+    () => ({
+      theme: themeMode === 'dark' ? darkTheme : lightTheme,
+      themeMode,
+      toggleTheme,
+      setThemeMode,
+    }),
+    [themeMode]
+  );
 
   return (
-    <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+    <ThemeContext.Provider value={themeValue}>
+      <SafeAreaProvider>
+        <RootNavigator />
+      </SafeAreaProvider>
+    </ThemeContext.Provider>
+  );
+};
+
+export default function App(): React.JSX.Element {
+  return (
+    <Provider store={store}>
       <AppContent />
-    </SafeAreaProvider>
+    </Provider>
   );
 }
-
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
-
-  return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
-
-export default App;
