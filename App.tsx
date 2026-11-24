@@ -1,16 +1,23 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { View, StyleSheet } from 'react-native';
 import { Provider } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import NetInfo from '@react-native-community/netinfo';
 import { store } from './src/app/store';
 import { RootNavigator } from './src/navigation/RootNavigator';
 import { ThemeContext, darkTheme, lightTheme, ThemeMode } from './src/theme';
 import { getThemePreference, saveThemePreference } from './src/storage/preferencesStorage';
-import { setNetworkStatus } from './src/features/offline/offlineSlice';
 import { setTheme } from './src/features/settings/settingsSlice';
+import { dismissReconnectedNotice } from './src/features/offline/offlineSlice';
+import { initNetworkListener } from './src/services/network/networkService';
+import { Snackbar } from './src/components/feedback';
+import { useAppSelector, useAppDispatch } from './src/app/hooks';
 
 const AppContent: React.FC = () => {
   const [themeMode, setThemeModeState] = useState<ThemeMode>('dark');
+  const dispatch = useAppDispatch();
+  const showReconnectedNotice = useAppSelector(
+    (state) => state.offline.showReconnectedNotice
+  );
 
   useEffect(() => {
     // Restore persistent theme preference
@@ -23,19 +30,11 @@ const AppContent: React.FC = () => {
     };
     restoreTheme();
 
-    // Subscribe to network connectivity changes
-    const unsubscribeNetInfo = NetInfo.addEventListener((state) => {
-      const isOnline = Boolean(state.isConnected);
-      store.dispatch(
-        setNetworkStatus({
-          isOnline,
-          isInternetReachable: state.isInternetReachable,
-        })
-      );
-    });
+    // Initialize network monitoring with automatic reconnect refresh
+    const unsubscribeNet = initNetworkListener();
 
     return () => {
-      unsubscribeNetInfo();
+      unsubscribeNet();
     };
   }, []);
 
@@ -63,11 +62,26 @@ const AppContent: React.FC = () => {
   return (
     <ThemeContext.Provider value={themeValue}>
       <SafeAreaProvider>
-        <RootNavigator />
+        <View style={styles.rootContainer}>
+          <RootNavigator />
+          <Snackbar
+            visible={showReconnectedNotice}
+            type="success"
+            message="Back online — fresh sports data loaded!"
+            onDismiss={() => dispatch(dismissReconnectedNotice())}
+            duration={3500}
+          />
+        </View>
       </SafeAreaProvider>
     </ThemeContext.Provider>
   );
 };
+
+const styles = StyleSheet.create({
+  rootContainer: {
+    flex: 1,
+  },
+});
 
 export default function App(): React.JSX.Element {
   return (
