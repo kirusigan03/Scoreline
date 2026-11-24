@@ -22,7 +22,7 @@ export const saveSecureTokens = async (
       accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
     });
     return true;
-  } catch (error) {
+  } catch {
     return false;
   }
 };
@@ -43,7 +43,7 @@ export const getSecureTokens = async (): Promise<StoredTokens | null> => {
       };
     }
     return null;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -57,7 +57,7 @@ export const clearSecureTokens = async (): Promise<boolean> => {
       service: KEYCHAIN_SERVICE,
     });
     return true;
-  } catch (error) {
+  } catch {
     return false;
   }
 };

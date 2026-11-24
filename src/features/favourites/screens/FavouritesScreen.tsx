@@ -3,7 +3,6 @@ import {
   View,
   FlatList,
   StyleSheet,
-  TouchableOpacity,
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import { useTheme } from '../../../theme';
@@ -20,12 +19,11 @@ import { toggleFavourite } from '../favouritesSlice';
 import { Team } from '../../sports/types';
 
 export const FavouritesScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
-  const { colors, spacing, radii } = useTheme();
+  const { colors, radii } = useTheme();
   const dispatch = useAppDispatch();
 
   const isOnline = useAppSelector((state) => state.offline.isOnline);
   const favourites = useAppSelector((state) => state.favourites.items);
-  const user = useAppSelector((state) => state.auth.user);
 
   const handleToggleFavourite = (team: Team) => {
     dispatch(toggleFavourite(team));

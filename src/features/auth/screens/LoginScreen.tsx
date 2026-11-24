@@ -3,7 +3,6 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
-  Alert,
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -157,7 +156,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
               },
             ]}>
             <Feather name="alert-triangle" size={18} color={colors.error} style={styles.errorIcon} />
-            <AppText variant="bodySmall" style={{ color: colors.error, flex: 1 }}>
+            <AppText variant="bodySmall" style={[styles.errorText, { color: colors.error }]}>
               {apiError}
             </AppText>
           </View>
@@ -283,6 +282,9 @@ const styles = StyleSheet.create({
   },
   errorIcon: {
     marginRight: 10,
+  },
+  errorText: {
+    flex: 1,
   },
   form: {
     width: '100%',

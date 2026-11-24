@@ -25,7 +25,7 @@ export const saveSportsListCache = async (
     };
     await AsyncStorage.setItem(CACHE_KEYS.SPORTS_LIST, JSON.stringify(payload));
     await AsyncStorage.setItem(CACHE_KEYS.LAST_REFRESH, Date.now().toString());
-  } catch (error) {
+  } catch {
     // Fail silently without blocking UI
   }
 };
@@ -40,7 +40,7 @@ export const getSportsListCache = async (): Promise<SportsListCache | null> => {
       return JSON.parse(json);
     }
     return null;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -56,7 +56,7 @@ export const saveTeamDetailsCache = async (team: Team): Promise<void> => {
       timestamp: Date.now(),
     };
     await AsyncStorage.setItem(CACHE_KEYS.TEAM_DETAILS, JSON.stringify(existing));
-  } catch (error) {
+  } catch {
     // Fail silently
   }
 };
@@ -71,7 +71,7 @@ export const getCachedTeamDetails = async (teamId: string): Promise<Team | null>
       return map[teamId].team;
     }
     return null;
-  } catch (error) {
+  } catch {
     return null;
   }
 };

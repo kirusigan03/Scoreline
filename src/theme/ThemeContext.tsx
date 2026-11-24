@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useMemo } from 'react';
-import { Theme, darkTheme, lightTheme, ThemeMode } from './themes';
+import { createContext, useContext } from 'react';
+import { Theme, darkTheme, ThemeMode } from './themes';
 
 interface ThemeContextValue {
   theme: Theme;

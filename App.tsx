@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Provider } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -38,16 +38,20 @@ const AppContent: React.FC = () => {
     };
   }, []);
 
-  const setThemeMode = (mode: ThemeMode) => {
+  const setThemeMode = useCallback((mode: ThemeMode) => {
     setThemeModeState(mode);
     saveThemePreference(mode);
     store.dispatch(setTheme(mode));
-  };
+  }, []);
 
-  const toggleTheme = () => {
-    const nextMode: ThemeMode = themeMode === 'dark' ? 'light' : 'dark';
-    setThemeMode(nextMode);
-  };
+  const toggleTheme = useCallback(() => {
+    setThemeModeState((prev) => {
+      const nextMode: ThemeMode = prev === 'dark' ? 'light' : 'dark';
+      saveThemePreference(nextMode);
+      store.dispatch(setTheme(nextMode));
+      return nextMode;
+    });
+  }, []);
 
   const themeValue = useMemo(
     () => ({
@@ -56,7 +60,7 @@ const AppContent: React.FC = () => {
       toggleTheme,
       setThemeMode,
     }),
-    [themeMode]
+    [themeMode, toggleTheme, setThemeMode]
   );
 
   return (

@@ -32,7 +32,7 @@ export const AppTextInput: React.FC<AppTextInputProps> = ({
   onBlur,
   ...props
 }) => {
-  const { colors, radii, spacing, typography } = useTheme();
+  const { colors, radii, typography } = useTheme();
   const [isFocused, setIsFocused] = useState(false);
 
   const handleFocus = (e: any) => {

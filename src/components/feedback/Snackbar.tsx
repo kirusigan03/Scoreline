@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { Animated, StyleSheet, ViewStyle, TouchableOpacity } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import { useTheme } from '../../theme';
@@ -26,6 +26,16 @@ export const Snackbar: React.FC<SnackbarProps> = ({
   const { colors, radii } = useTheme();
   const translateY = useRef(new Animated.Value(-80)).current;
 
+  const hide = useCallback(() => {
+    Animated.timing(translateY, {
+      toValue: -80,
+      duration: 250,
+      useNativeDriver: true,
+    }).start(() => {
+      onDismiss();
+    });
+  }, [translateY, onDismiss]);
+
   useEffect(() => {
     if (visible) {
       Animated.spring(translateY, {
@@ -43,17 +53,7 @@ export const Snackbar: React.FC<SnackbarProps> = ({
     } else {
       hide();
     }
-  }, [visible]);
-
-  const hide = () => {
-    Animated.timing(translateY, {
-      toValue: -80,
-      duration: 250,
-      useNativeDriver: true,
-    }).start(() => {
-      onDismiss();
-    });
-  };
+  }, [visible, duration, hide, translateY]);
 
   let iconName = 'info';
   let accentColor = colors.primary;

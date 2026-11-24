@@ -10,8 +10,20 @@ import { useTheme } from '../theme';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
+const HomeTabIcon = ({ color }: { color: string }) => (
+  <Feather name="home" size={22} color={color} />
+);
+
+const FavouritesTabIcon = ({ color }: { color: string }) => (
+  <Feather name="heart" size={22} color={color} />
+);
+
+const ProfileTabIcon = ({ color }: { color: string }) => (
+  <Feather name="user" size={22} color={color} />
+);
+
 export const MainTabNavigator: React.FC = () => {
-  const { colors, isDark } = useTheme();
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
 
   return (
@@ -38,9 +50,7 @@ export const MainTabNavigator: React.FC = () => {
         component={HomeNavigator}
         options={{
           tabBarLabel: 'Home',
-          tabBarIcon: ({ color, size }) => (
-            <Feather name="home" size={22} color={color} />
-          ),
+          tabBarIcon: HomeTabIcon,
         }}
       />
       <Tab.Screen
@@ -48,9 +58,7 @@ export const MainTabNavigator: React.FC = () => {
         component={FavouritesNavigator}
         options={{
           tabBarLabel: 'Favourites',
-          tabBarIcon: ({ color, size }) => (
-            <Feather name="heart" size={22} color={color} />
-          ),
+          tabBarIcon: FavouritesTabIcon,
         }}
       />
       <Tab.Screen
@@ -58,9 +66,7 @@ export const MainTabNavigator: React.FC = () => {
         component={ProfileScreen}
         options={{
           tabBarLabel: 'Profile',
-          tabBarIcon: ({ color, size }) => (
-            <Feather name="user" size={22} color={color} />
-          ),
+          tabBarIcon: ProfileTabIcon,
         }}
       />
     </Tab.Navigator>

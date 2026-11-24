@@ -21,7 +21,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
   rightAction,
   style,
 }) => {
-  const { colors, spacing } = useTheme();
+  const { colors } = useTheme();
 
   return (
     <View style={[styles.header, { borderBottomColor: colors.border }, style]}>

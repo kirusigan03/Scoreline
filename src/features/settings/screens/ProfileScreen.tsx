@@ -3,10 +3,9 @@ import {
   View,
   ScrollView,
   StyleSheet,
-  TouchableOpacity,
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
-import { useTheme, useThemeController } from '../../../theme';
+import { useTheme } from '../../../theme';
 import {
   AppText,
   ScreenContainer,
@@ -24,7 +23,7 @@ import { clearSecureTokens } from '../../../storage/secureStorage';
 import { clearCachedUserProfile } from '../../../storage/preferencesStorage';
 
 export const ProfileScreen: React.FC = () => {
-  const { colors, isDark, radii, spacing } = useTheme();
+  const { colors, isDark, radii } = useTheme();
   const dispatch = useAppDispatch();
 
   const user = useAppSelector((state) => state.auth.user);
@@ -89,7 +88,7 @@ export const ProfileScreen: React.FC = () => {
           </AppText>
           {user?.email ? (
             <View style={styles.emailRow}>
-              <Feather name="mail" size={14} color={colors.textSecondary} style={{ marginRight: 6 }} />
+              <Feather name="mail" size={14} color={colors.textSecondary} style={styles.emailIcon} />
               <AppText variant="caption" secondary>
                 {user.email}
               </AppText>
@@ -264,6 +263,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
+  },
+  emailIcon: {
+    marginRight: 6,
   },
   statsDivider: {
     height: 1,

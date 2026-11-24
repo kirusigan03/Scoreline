@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
-import { useTheme } from '../../../theme';
 import { AppText } from '../../../components/common/AppText';
 import { useAppDispatch } from '../../../app/hooks';
 import { setCredentials, setInitialized } from '../authSlice';
@@ -9,7 +8,6 @@ import { getSecureTokens } from '../../../storage/secureStorage';
 import { getCachedUserProfile } from '../../../storage/preferencesStorage';
 
 export const SplashScreen: React.FC = () => {
-  const { colors } = useTheme();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -26,7 +24,7 @@ export const SplashScreen: React.FC = () => {
             })
           );
         }
-      } catch (e) {
+      } catch {
         // Fallback to unauthenticated state
       } finally {
         dispatch(setInitialized(true));
@@ -37,7 +35,7 @@ export const SplashScreen: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <View style={[styles.container, { backgroundColor: '#101820' }]}>
+    <View style={styles.container}>
       <View style={styles.brandContainer}>
         <View style={styles.iconCircle}>
           <Feather name="activity" size={38} color="#101820" />
@@ -65,6 +63,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 24,
+    backgroundColor: '#101820',
   },
   brandContainer: {
     alignItems: 'center',

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   ScrollView,
@@ -37,7 +37,7 @@ type Props = NativeStackScreenProps<HomeStackParamList, 'TeamDetails'>;
 
 export const TeamDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
   const { teamId, teamName } = route.params;
-  const { colors, spacing, radii } = useTheme();
+  const { colors, radii } = useTheme();
   const dispatch = useAppDispatch();
 
   const isOnline = useAppSelector((state) => state.offline.isOnline);
@@ -242,14 +242,14 @@ export const TeamDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
                   {team.strSport ? (
                     <View style={[styles.metaPill, { backgroundColor: colors.accentSurface }]}>
                       <Feather name="activity" size={13} color={colors.primary} style={styles.pillIcon} />
-                      <AppText variant="caption" style={{ color: colors.primary, fontWeight: '700' }}>
+                      <AppText variant="caption" style={[styles.pillBold, { color: colors.primary }]}>
                         {team.strSport}
                       </AppText>
                     </View>
                   ) : null}
 
                   {team.strCountry ? (
-                    <View style={[styles.metaPill, { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1 }]}>
+                    <View style={[styles.metaPill, styles.borderPill, { backgroundColor: colors.surface, borderColor: colors.border }]}>
                       <Feather name="map-pin" size={13} color={colors.textSecondary} style={styles.pillIcon} />
                       <AppText variant="caption" secondary>
                         {team.strCountry}
@@ -258,7 +258,7 @@ export const TeamDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
                   ) : null}
 
                   {team.intFormedYear ? (
-                    <View style={[styles.metaPill, { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1 }]}>
+                    <View style={[styles.metaPill, styles.borderPill, { backgroundColor: colors.surface, borderColor: colors.border }]}>
                       <Feather name="calendar" size={13} color={colors.textSecondary} style={styles.pillIcon} />
                       <AppText variant="caption" secondary>
                         Est. {team.intFormedYear}
@@ -299,11 +299,11 @@ export const TeamDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
                   <Feather name="award" size={18} color={colors.primary} style={styles.cardIcon} />
                   <AppText variant="cardTitle">Competition</AppText>
                 </View>
-                <AppText variant="bodyBold" style={{ marginTop: 6 }}>
+                <AppText variant="bodyBold" style={styles.cardTopMargin}>
                   {team.strLeague}
                 </AppText>
                 {team.strDivision ? (
-                  <AppText variant="bodySmall" secondary style={{ marginTop: 2 }}>
+                  <AppText variant="bodySmall" secondary style={styles.cardSubMargin}>
                     Division: {team.strDivision}
                   </AppText>
                 ) : null}
@@ -325,7 +325,7 @@ export const TeamDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
                   <Feather name="home" size={18} color={colors.primary} style={styles.cardIcon} />
                   <AppText variant="cardTitle">Home Venue</AppText>
                 </View>
-                <AppText variant="bodyBold" style={{ marginTop: 6 }}>
+                <AppText variant="bodyBold" style={styles.cardTopMargin}>
                   {team.strStadium}
                 </AppText>
                 <View style={styles.venueMetaRow}>
@@ -335,13 +335,13 @@ export const TeamDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
                     </AppText>
                   ) : null}
                   {team.intStadiumCapacity ? (
-                    <AppText variant="bodySmall" secondary style={{ marginLeft: 12 }}>
+                    <AppText variant="bodySmall" secondary style={styles.capacityText}>
                       👥 Capacity: {Number(team.intStadiumCapacity).toLocaleString()}
                     </AppText>
                   ) : null}
                 </View>
                 {team.strStadiumDescription ? (
-                  <AppText variant="bodySmall" secondary style={{ marginTop: 8, lineHeight: 18 }}>
+                  <AppText variant="bodySmall" secondary style={styles.stadiumDesc}>
                     {team.strStadiumDescription}
                   </AppText>
                 ) : null}
@@ -486,8 +486,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 14,
   },
+  borderPill: {
+    borderWidth: 1,
+  },
   pillIcon: {
     marginRight: 6,
+  },
+  pillBold: {
+    fontWeight: '700',
   },
   favouriteActionButton: {
     marginBottom: 16,
@@ -504,10 +510,23 @@ const styles = StyleSheet.create({
   cardIcon: {
     marginRight: 8,
   },
+  cardTopMargin: {
+    marginTop: 6,
+  },
+  cardSubMargin: {
+    marginTop: 2,
+  },
   venueMetaRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginTop: 6,
+  },
+  capacityText: {
+    marginLeft: 12,
+  },
+  stadiumDesc: {
+    marginTop: 8,
+    lineHeight: 18,
   },
   descriptionText: {
     marginTop: 10,

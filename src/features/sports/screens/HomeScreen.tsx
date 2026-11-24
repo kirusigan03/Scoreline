@@ -50,7 +50,7 @@ const CATEGORIES = [
 ];
 
 export const HomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
-  const { colors, spacing, radii } = useTheme();
+  const { colors, radii } = useTheme();
   const dispatch = useAppDispatch();
 
   const user = useAppSelector((state) => state.auth.user);
@@ -296,7 +296,7 @@ export const HomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
                       <View style={[styles.liveDot, { backgroundColor: colors.primary }]} />
                       <AppText
                         variant="caption"
-                        style={{ color: colors.primary, fontWeight: '700' }}>
+                        style={[styles.featuredTagText, { color: colors.primary }]}>
                         FEATURED LEAGUE
                       </AppText>
                     </View>
@@ -458,6 +458,9 @@ const styles = StyleSheet.create({
     height: 6,
     borderRadius: 3,
     marginRight: 6,
+  },
+  featuredTagText: {
+    fontWeight: '700',
   },
   featuredTitle: {
     marginBottom: 6,

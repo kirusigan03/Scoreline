@@ -17,7 +17,7 @@ export const saveUserFavourites = async (
     if (!username) return;
     const key = getStorageKey(username);
     await AsyncStorage.setItem(key, JSON.stringify(favourites));
-  } catch (error) {
+  } catch {
     // Fail silently
   }
 };
@@ -34,7 +34,7 @@ export const getUserFavourites = async (username: string): Promise<Team[]> => {
       return JSON.parse(json);
     }
     return [];
-  } catch (error) {
+  } catch {
     return [];
   }
 };

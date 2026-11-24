@@ -22,7 +22,7 @@ export interface CachedUserProfile {
 export const saveThemePreference = async (mode: ThemeMode): Promise<void> => {
   try {
     await AsyncStorage.setItem(STORAGE_KEYS.THEME_MODE, mode);
-  } catch (error) {
+  } catch {
     // Fail silently
   }
 };
@@ -37,7 +37,7 @@ export const getThemePreference = async (): Promise<ThemeMode | null> => {
       return value;
     }
     return null;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -48,7 +48,7 @@ export const getThemePreference = async (): Promise<ThemeMode | null> => {
 export const saveCachedUserProfile = async (profile: CachedUserProfile): Promise<void> => {
   try {
     await AsyncStorage.setItem(STORAGE_KEYS.USER_PROFILE, JSON.stringify(profile));
-  } catch (error) {
+  } catch {
     // Fail silently
   }
 };
@@ -63,7 +63,7 @@ export const getCachedUserProfile = async (): Promise<CachedUserProfile | null> 
       return JSON.parse(json);
     }
     return null;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -74,7 +74,7 @@ export const getCachedUserProfile = async (): Promise<CachedUserProfile | null> 
 export const clearCachedUserProfile = async (): Promise<void> => {
   try {
     await AsyncStorage.removeItem(STORAGE_KEYS.USER_PROFILE);
-  } catch (error) {
+  } catch {
     // Fail silently
   }
 };
@@ -85,7 +85,7 @@ export const clearCachedUserProfile = async (): Promise<void> => {
 export const saveLastRefreshTimestamp = async (timestamp: number): Promise<void> => {
   try {
     await AsyncStorage.setItem(STORAGE_KEYS.LAST_REFRESH, timestamp.toString());
-  } catch (error) {
+  } catch {
     // Fail silently
   }
 };
@@ -97,7 +97,7 @@ export const getLastRefreshTimestamp = async (): Promise<number | null> => {
   try {
     const val = await AsyncStorage.getItem(STORAGE_KEYS.LAST_REFRESH);
     return val ? parseInt(val, 10) : null;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
